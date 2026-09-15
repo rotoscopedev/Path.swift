@@ -239,7 +239,7 @@ extension PathTests {
 
     func testLsOnNonexistentDirectoryReturnsEmptyArray() throws {
         try Path.mktemp { tmpdir in
-            XCTAssertEqual(tmpdir.a.ls(), [])
+            XCTAssertThrowsError(try tmpdir.a.ls())
         }
     }
 

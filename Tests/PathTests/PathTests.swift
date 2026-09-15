@@ -39,7 +39,7 @@ class PathTests: XCTestCase {
         try tmpdir.join(".d").mkdir().join("e").touch()
 
         var paths = Set<String>()
-        let lsrv = tmpdir.ls(.a)
+        let lsrv = try tmpdir.ls(.a)
         var dirs = 0
         for path in lsrv {
             if path.isDirectory {
@@ -67,7 +67,7 @@ class PathTests: XCTestCase {
         
         var paths = Set<String>()
         var dirs = 0
-        for path in tmpdir.ls() {
+        for path in try tmpdir.ls() {
             if path.isDirectory {
                 dirs += 1
             }

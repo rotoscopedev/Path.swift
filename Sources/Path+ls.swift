@@ -170,13 +170,11 @@ public extension Pathish {
      - Parameter options: Configure the listing.
      - Important: On Linux the listing is always `ls -a`
      */
-    func ls(_ options: ListDirectoryOptions? = nil) -> [Path] {
-        guard let urls = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) else {
-            fputs("warning: could not list: \(self)\n", stderr)
-            return []
-        }
-        return urls.compactMap { url in
-            guard let path = Path(url.path) else { return nil }
+    func ls(_ options: ListDirectoryOptions? = nil) throws -> [Path] {
+        let urls = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+      
+        return try urls.compactMap { url in
+            guard let path = Path(url.path) else { throw CocoaError.error(.fileReadInvalidFileName) }
             if options != .a, path.basename().hasPrefix(".") { return nil }
             // ^^ we don’t use the Foundation `skipHiddenFiles` because it considers weird things hidden and we are mirroring `ls`
             return path
